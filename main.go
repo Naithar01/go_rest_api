@@ -13,8 +13,19 @@ type Category struct {
 }
 
 type Post struct {
-	Id      int    `json:"id"`
-	Content string `json:"content"`
+	Id           int    `json:"id"`
+	Content      string `json:"content"`
+	CategoryName string `json:"categoryName"`
+}
+
+func middlewareCategory(c *fiber.Ctx) error {
+	log.Println("middleWare Category pass")
+	return c.Next()
+}
+
+func middlewarePost(c *fiber.Ctx) error {
+	log.Println("middleWare Post pass")
+	return c.Next()
 }
 
 func main() {
@@ -23,15 +34,20 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/api/category", func(c *fiber.Ctx) error {
+	api := app.Group("/api")
+
+	categoryRouter := api.Group("/category", middlewareCategory)
+	postRouter := api.Group("/post", middlewarePost)
+
+	categoryRouter.Get("", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(categorys)
 	})
 
-	app.Get("/api/post", func(c *fiber.Ctx) error {
+	postRouter.Get("", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(posts)
 	})
 
-	app.Post("/api/category", func(c *fiber.Ctx) error {
+	categoryRouter.Post("", func(c *fiber.Ctx) error {
 		var newCategory = &Category{}
 
 		if err := c.BodyParser(newCategory); err != nil {
@@ -45,7 +61,7 @@ func main() {
 		return c.Status(201).JSON(newCategory)
 	})
 
-	app.Post("/api/post/:categoryId", func(c *fiber.Ctx) error {
+	postRouter.Post("/:categoryId", func(c *fiber.Ctx) error {
 		categoryId, err := c.ParamsInt("categoryId")
 
 		if err != nil {
@@ -61,6 +77,7 @@ func main() {
 		for index, category := range categorys {
 			if category.Id == categoryId {
 				newPost.Id = len(posts) + 1
+				newPost.CategoryName = category.Title
 				posts = append(posts, *newPost)
 
 				categorys[index].Posts = append(categorys[index].Posts, *newPost)
@@ -73,7 +90,7 @@ func main() {
 		return c.Status(401).SendString("Some Error, Fail Create Post")
 	})
 
-	app.Get("/api/post/:id", func(c *fiber.Ctx) error {
+	postRouter.Get("/:id", func(c *fiber.Ctx) error {
 		id, err := c.ParamsInt("id")
 
 		if err != nil {

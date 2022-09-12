@@ -2,8 +2,6 @@ module github/com/Naithar01/go_rest_api
 
 go 1.17
 
-require github.com/gofiber/fiber v1.14.6
-
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/gofiber/fiber/v2 v2.37.1 // indirect
