@@ -13,7 +13,8 @@ type Category struct {
 }
 
 type Post struct {
-	Id int `json:"id"`
+	Id      int    `json:"id"`
+	Content string `json:"content"`
 }
 
 func main() {
@@ -44,18 +45,32 @@ func main() {
 		return c.Status(201).JSON(newCategory)
 	})
 
-	app.Post("/api/post", func(c *fiber.Ctx) error {
+	app.Post("/api/post/:categoryId", func(c *fiber.Ctx) error {
+		categoryId, err := c.ParamsInt("categoryId")
+
+		if err != nil {
+			return c.Status(401).SendString("Cant find Category Id")
+		}
+
 		var newPost = &Post{}
 
 		if err := c.BodyParser(newPost); err != nil {
-			return err
+			return c.Status(401).SendString("Some Error, Fail Create Post")
 		}
 
-		newPost.Id = len(posts) + 1
+		for index, category := range categorys {
+			if category.Id == categoryId {
+				newPost.Id = len(posts) + 1
+				posts = append(posts, *newPost)
 
-		posts = append(posts, *newPost)
+				categorys[index].Posts = append(categorys[index].Posts, *newPost)
 
-		return c.Status(201).JSON(newPost)
+				return c.Status(201).JSON(category)
+
+			}
+		}
+
+		return c.Status(401).SendString("Some Error, Fail Create Post")
 	})
 
 	app.Get("/api/post/:id", func(c *fiber.Ctx) error {
