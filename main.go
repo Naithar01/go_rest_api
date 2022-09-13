@@ -10,12 +10,13 @@ import (
 	"github/com/Naithar01/go_rest_api/models"
 )
 
-func AddPost(id int, post *models.Post) error {
+func AddPost(id uint, post *models.Post) error {
 	var category models.Category
 
 	database.Database.Find(&category, "id = ?", id)
 
 	post.Category = category
+
 
 	if category.Id == 0 {
 		return errors.New("order does not exist")
@@ -67,8 +68,6 @@ func main() {
 		if err := AddPost(post.CategoryRefer, &post); err != nil {
 			return c.Status(400).SendString(err.Error())
 		}
-
-		AddPost(post.CategoryRefer, &post)
 
 		database.Database.Create(&post)
 
