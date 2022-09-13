@@ -3,10 +3,10 @@ package models
 import "time"
 
 type Post struct {
-	Id            int      `gorm:"primaryKey"`
+	Id            int      `json:"id" gorm:"primaryKey"`
 	Content       string   `json:"content"`
 	CategoryRefer int      `json:"category_id"`
-	Category      Category `gorm:"foreignKey:CategoryRefer"`
+	Category      Category `json:"category" gorm:"foreignKey:CategoryRefer"`
 	CreatedAt     time.Time
 	UpdateAt      time.Time
 }
