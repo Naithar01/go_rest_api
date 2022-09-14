@@ -116,7 +116,11 @@ func main() {
 			return c.Status(401).SendString("Validate Post Id")
 		}
 
-		return c.Status(200).JSON(post)
+		var category models.Category
+
+		database.Database.Find(&category, "id = ?", post.CategoryRefer)
+
+		return c.Status(200).JSON(actions.CreateFindResponsePost(post, category))
 	})
 
 	log.Fatal(app.Listen(":4000"))
