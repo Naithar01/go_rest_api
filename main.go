@@ -101,5 +101,23 @@ func main() {
 		return c.Status(201).JSON(post)
 	})
 
+	app.Get("/api/post/:id", func(c *fiber.Ctx) error {
+		id, err := c.ParamsInt("id")
+
+		if err != nil {
+			return c.Status(401).SendString("Validate Post Id")
+		}
+
+		var post models.Post
+
+		database.Database.Find(&post, "id = ?", id)
+
+		if post.Id == 0 {
+			return c.Status(401).SendString("Validate Post Id")
+		}
+
+		return post
+	})
+
 	log.Fatal(app.Listen(":4000"))
 }
