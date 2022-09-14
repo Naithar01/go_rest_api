@@ -51,6 +51,25 @@ func main() {
 		return c.Status(201).JSON(category)
 	})
 
+	app.Get("/api/category/:id", func(c *fiber.Ctx) error {
+		id, err := c.ParamsInt("id")
+
+		if err != nil {
+			return c.Status(401).SendString("Validate Category id")
+		}
+
+		var category models.Category
+
+		database.Database.Find(&category, "id = ?", id)
+
+		if category.Id == 0 {
+			return c.Status(401).SendString("Validate Category id")
+		}
+
+		return c.Status(200).JSON(category)
+
+	})
+
 	app.Get("/api/post", func(c *fiber.Ctx) error {
 		posts := []models.Post{}
 
