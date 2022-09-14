@@ -116,7 +116,7 @@ func main() {
 			return c.Status(401).SendString("Validate Post Id")
 		}
 
-		return post
+		return c.Status(200).JSON(post)
 	})
 
 	log.Fatal(app.Listen(":4000"))
