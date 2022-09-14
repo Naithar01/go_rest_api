@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
+	"github/com/Naithar01/go_rest_api/actions"
 	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/models"
 )
@@ -16,7 +17,6 @@ func AddPost(id uint, post *models.Post) error {
 	database.Database.Find(&category, "id = ?", id)
 
 	post.Category = category
-
 
 	if category.Id == 0 {
 		return errors.New("order does not exist")
@@ -56,8 +56,16 @@ func main() {
 
 		database.Database.Find(&posts)
 
-		return c.Status(200).JSON(posts)
+		responsePosts := []actions.ResponsePost{}
+
+		for _, post := range posts {
+			responsePost := actions.CreateResponsePost(post)
+			responsePosts = append(responsePosts, responsePost)
+		}
+
+		return c.Status(200).JSON(responsePosts)
 	})
+
 	app.Post("/api/post", func(c *fiber.Ctx) error {
 		var post models.Post
 
