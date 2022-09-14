@@ -1,29 +1,13 @@
 package main
 
 import (
-	"errors"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
 
-	"github/com/Naithar01/go_rest_api/actions"
 	"github/com/Naithar01/go_rest_api/database"
-	"github/com/Naithar01/go_rest_api/models"
+	"github/com/Naithar01/go_rest_api/router"
 )
-
-func AddPost(id uint, post *models.Post) error {
-	var category models.Category
-
-	database.Database.Find(&category, "id = ?", id)
-
-	post.Category = category
-
-	if category.Id == 0 {
-		return errors.New("order does not exist")
-	}
-
-	return nil
-}
 
 func main() {
 
@@ -31,97 +15,17 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/api/category", func(c *fiber.Ctx) error {
-		categorys := []models.Category{}
+	app.Get("/api/category", router.FindAllCategory)
 
-		database.Database.Find(&categorys)
+	app.Post("/api/category", router.CreateCategory)
 
-		return c.Status(200).JSON(categorys)
-	})
+	app.Get("/api/category/:id", router.FindCategoryById)
 
-	app.Post("/api/category", func(c *fiber.Ctx) error {
-		var category models.Category
+	app.Get("/api/post", router.FindAllPost)
 
-		if err := c.BodyParser(&category); err != nil {
-			return c.Status(400).SendString(err.Error())
-		}
+	app.Post("/api/post", router.CreatePostfunc)
 
-		database.Database.Create(&category)
-
-		return c.Status(201).JSON(category)
-	})
-
-	app.Get("/api/category/:id", func(c *fiber.Ctx) error {
-		id, err := c.ParamsInt("id")
-
-		if err != nil {
-			return c.Status(401).SendString("Validate Category id")
-		}
-
-		var category models.Category
-
-		database.Database.Find(&category, "id = ?", id)
-
-		if category.Id == 0 {
-			return c.Status(401).SendString("Validate Category id")
-		}
-
-		return c.Status(200).JSON(category)
-
-	})
-
-	app.Get("/api/post", func(c *fiber.Ctx) error {
-		posts := []models.Post{}
-
-		database.Database.Find(&posts)
-
-		responsePosts := []actions.ResponsePost{}
-
-		for _, post := range posts {
-			responsePost := actions.CreateResponsePost(post)
-			responsePosts = append(responsePosts, responsePost)
-		}
-
-		return c.Status(200).JSON(responsePosts)
-	})
-
-	app.Post("/api/post", func(c *fiber.Ctx) error {
-		var post models.Post
-
-		if err := c.BodyParser(&post); err != nil {
-			return c.Status(400).SendString(err.Error())
-		}
-
-		if err := AddPost(post.CategoryRefer, &post); err != nil {
-			return c.Status(400).SendString(err.Error())
-		}
-
-		database.Database.Create(&post)
-
-		return c.Status(201).JSON(post)
-	})
-
-	app.Get("/api/post/:id", func(c *fiber.Ctx) error {
-		id, err := c.ParamsInt("id")
-
-		if err != nil {
-			return c.Status(401).SendString("Validate Post Id")
-		}
-
-		var post models.Post
-
-		database.Database.Find(&post, "id = ?", id)
-
-		if post.Id == 0 {
-			return c.Status(401).SendString("Validate Post Id")
-		}
-
-		var category models.Category
-
-		database.Database.Find(&category, "id = ?", post.CategoryRefer)
-
-		return c.Status(200).JSON(actions.CreateFindResponsePost(post, category))
-	})
+	app.Get("/api/post/:id", router.FindPostById)
 
 	log.Fatal(app.Listen(":4000"))
 }
