@@ -8,8 +8,8 @@ go get -u {Library url}
 
 # How to use Query
 
-### Create Struct
-
+## Create Struct
+### First String must be capper 
 ```
 type Person struct {
 Name string `query:"name"`
@@ -18,7 +18,7 @@ Products []string `query:"products"`
 }
 ```
 
-### Create New Struct Keyword & use fiber Context QueryBarser & log querys
+## Create New Struct Keyword & use fiber Context QueryBarser & log querys
 
 ```
 category_query := new(Person)
