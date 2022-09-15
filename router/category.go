@@ -45,3 +45,16 @@ func FindCategoryById(c *fiber.Ctx) error {
 	return c.Status(200).JSON(category)
 
 }
+
+func DeleteCategory(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+
+	if err != nil {
+		return c.Status(401).SendString("Validate Category Id")
+	}
+
+	database.Database.Unscoped().Where("id = ?", id).Delete(&models.Category{})
+
+	return c.Status(200).SendString("Success")
+
+}

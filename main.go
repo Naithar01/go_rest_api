@@ -19,6 +19,7 @@ func main() {
 	app.Get("/api/category", router.FindAllCategory)
 	app.Post("/api/category", router.CreateCategory)
 	app.Get("/api/category/:id", router.FindCategoryById)
+	app.Delete("/api/category/:id", router.DeleteCategory)
 
 	// Post
 	app.Get("/api/post", router.FindAllPost)
