@@ -6,10 +6,12 @@ go mod init github/com/Naithar01/{name...}
 
 go get -u {Library url}
 
-# How to use Query
+# How to use Fiber Query
 
 ## Create Struct
-### First String must be capper 
+
+### First String must be capper
+
 ```
 type Person struct {
 Name string `query:"name"`
@@ -31,4 +33,17 @@ category_query := new(Person)
 
     // localhost:4000/hello?name=james&pass=good&products=apple&products=banana
     -- ( &{james good [apple banana]} )
+```
+
+# How to Search Data by Query
+
+```
+	db.Find(&user, "id = ?", "1b74413f-f3b8-409f-ac47-e8c062e3472a")
+	// "&user" is save variable
+	var user models.User
+	// user is variable name, models.User is entitis, struct
+
+	// mysql query
+	// SELECT * FROM users WHERE id = "1b74413f-f3b8-409f-ac47-e8c062e3472a";
+
 ```

@@ -28,9 +28,6 @@ func AddPost(id uint, post *models.Post) error {
 }
 
 func FindAllPost(c *fiber.Ctx) error {
-	// db.First(&user, "id = ?", "1b74413f-f3b8-409f-ac47-e8c062e3472a")
-	// SELECT * FROM users WHERE id = "1b74413f-f3b8-409f-ac47-e8c062e3472a";
-
 	category_query := new(FindAllPostQuery)
 
 	if err := c.QueryParser(category_query); err != nil {
