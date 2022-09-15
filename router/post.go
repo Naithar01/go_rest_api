@@ -38,7 +38,7 @@ func FindAllPost(c *fiber.Ctx) error {
 	return c.Status(200).JSON(responsePosts)
 }
 
-func CreatePostfunc(c *fiber.Ctx) error {
+func CreatePost(c *fiber.Ctx) error {
 	var post models.Post
 
 	if err := c.BodyParser(&post); err != nil {
@@ -74,4 +74,17 @@ func FindPostById(c *fiber.Ctx) error {
 	database.Database.Find(&category, "id = ?", post.CategoryRefer)
 
 	return c.Status(200).JSON(actions.CreateFindResponsePost(post, category))
+}
+
+func DeletePost(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+
+	if err != nil {
+		return c.Status(401).SendString("Validate Post Id")
+	}
+
+	database.Database.Unscoped().Where("id = ?", id).Delete(&models.Post{})
+
+	return c.Status(200).SendString("Success")
+
 }
