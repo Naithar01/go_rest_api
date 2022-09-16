@@ -47,3 +47,15 @@ category_query := new(Person)
 	// SELECT * FROM users WHERE id = "1b74413f-f3b8-409f-ac47-e8c062e3472a";
 
 ```
+
+# How to Add ( Array ) Column
+
+```
+	Tags          pq.StringArray `json:"tags" gorm:"type:text"`
+```
+
+## if Data Type is Integer
+
+```
+	Tags          pq.Int64Array `json:"tags" gorm:"type:integer"`
+```
