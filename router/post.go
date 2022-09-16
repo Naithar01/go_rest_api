@@ -73,6 +73,10 @@ func CreatePost(c *fiber.Ctx) error {
 		return c.Status(400).SendString(err.Error())
 	}
 
+	if len(post.Tags) != 0 {
+		post.Tags = nil
+	}
+
 	database.Database.Create(&post)
 
 	return c.Status(201).JSON(post)
