@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/models"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type ResponsePost struct {
-	Id            int            `json:"id"`
+	Id            uint           `json:"id"`
 	Content       string         `json:"content"`
 	CategoryRefer uint           `json:"category_id"`
 	Tags          pq.StringArray `json:"tags"`
@@ -16,7 +17,7 @@ type ResponsePost struct {
 }
 
 type FindResponsePost struct {
-	Id            int             `json:"id"`
+	Id            uint            `json:"id"`
 	Content       string          `json:"content"`
 	CategoryRefer uint            `json:"category_id"`
 	Category      models.Category `json:"category"`
@@ -25,11 +26,15 @@ type FindResponsePost struct {
 }
 
 func CreateResponsePost(post models.Post) ResponsePost {
-	return ResponsePost{Id: int(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, CreatedAt: post.CreatedAt, Tags: post.Tags}
+	return ResponsePost{Id: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, CreatedAt: post.CreatedAt, Tags: post.Tags}
 }
 
 func CreateFindResponsePost(post models.Post, category models.Category) FindResponsePost {
 	return FindResponsePost{
-		Id: int(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, Category: category, CreatedAt: post.CreatedAt, Tags: post.Tags,
+		Id: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, Category: category, CreatedAt: post.CreatedAt, Tags: post.Tags,
 	}
+}
+
+func CreateFindPostByCategoryIdResponse(posts *[]models.Post, category_id uint) {
+	database.Database.Find(&posts, "category_refer = ?", category_id)
 }

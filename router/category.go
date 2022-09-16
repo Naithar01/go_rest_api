@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github/com/Naithar01/go_rest_api/actions"
 	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/models"
 
@@ -12,7 +13,18 @@ func FindAllCategory(c *fiber.Ctx) error {
 
 	database.Database.Find(&categorys)
 
-	return c.Status(200).JSON(categorys)
+	responseCategorys := []actions.ResponseCategory{}
+
+	posts := []models.Post{}
+
+	for _, category := range categorys {
+		actions.CreateFindPostByCategoryIdResponse(&posts, category.Id)
+
+		responseCategory := actions.CreateResponseCategory(category, len(posts))
+		responseCategorys = append(responseCategorys, responseCategory)
+	}
+
+	return c.Status(200).JSON(responseCategorys)
 }
 
 func CreateCategory(c *fiber.Ctx) error {
@@ -43,7 +55,6 @@ func FindCategoryById(c *fiber.Ctx) error {
 	}
 
 	return c.Status(200).JSON(category)
-
 }
 
 func DeleteCategory(c *fiber.Ctx) error {
@@ -56,5 +67,4 @@ func DeleteCategory(c *fiber.Ctx) error {
 	database.Database.Unscoped().Where("id = ?", id).Delete(&models.Category{})
 
 	return c.Status(200).SendString("Success")
-
 }

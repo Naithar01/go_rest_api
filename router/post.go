@@ -2,6 +2,7 @@ package router
 
 import (
 	"errors"
+	"fmt"
 	"github/com/Naithar01/go_rest_api/actions"
 	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/models"
@@ -10,7 +11,7 @@ import (
 )
 
 type FindAllPostQuery struct {
-	Category_id string `query:"category_id"`
+	Category_id uint `query:"category_id"`
 }
 
 func AddPost(id uint, post *models.Post) error {
@@ -36,8 +37,10 @@ func FindAllPost(c *fiber.Ctx) error {
 
 	posts := []models.Post{}
 
-	if len(category_query.Category_id) != 0 {
-		database.Database.Find(&posts, "category_refer = ?", category_query.Category_id)
+	if category_query.Category_id != 0 {
+		actions.CreateFindPostByCategoryIdResponse(&posts, category_query.Category_id)
+
+		fmt.Println(category_query)
 
 		responsePosts := []actions.ResponsePost{}
 
@@ -73,7 +76,7 @@ func CreatePost(c *fiber.Ctx) error {
 		return c.Status(400).SendString(err.Error())
 	}
 
-	if len(post.Tags) != 0 {
+	if len(post.Tags) == 0 {
 		post.Tags = nil
 	}
 
