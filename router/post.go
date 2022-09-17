@@ -96,7 +96,7 @@ func FindPostById(c *fiber.Ctx) error {
 
 	database.Database.Find(&post, "id = ?", id)
 
-	if post.Id == 0 {
+	if post.ID == 0 {
 		return c.Status(401).SendString("Validate Post Id")
 	}
 

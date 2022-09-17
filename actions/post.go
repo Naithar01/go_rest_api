@@ -26,12 +26,12 @@ type FindResponsePost struct {
 }
 
 func CreateResponsePost(post models.Post) ResponsePost {
-	return ResponsePost{ID: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, CreatedAt: post.CreatedAt, Tags: post.Tags}
+	return ResponsePost{ID: uint(post.ID), Content: post.Content, CategoryRefer: post.CategoryRefer, CreatedAt: post.CreatedAt, Tags: post.Tags}
 }
 
 func CreateFindResponsePost(post models.Post, category models.Category) FindResponsePost {
 	return FindResponsePost{
-		ID: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, Category: category, CreatedAt: post.CreatedAt, Tags: post.Tags,
+		ID: uint(post.ID), Content: post.Content, CategoryRefer: post.CategoryRefer, Category: category, CreatedAt: post.CreatedAt, Tags: post.Tags,
 	}
 }
 
