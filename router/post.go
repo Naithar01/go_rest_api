@@ -119,3 +119,34 @@ func DeletePost(c *fiber.Ctx) error {
 	return c.Status(200).SendString("Success")
 
 }
+
+func UpdatePost(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+
+	if err != nil {
+		return c.Status(401).SendString("Validate Post Id")
+	}
+
+	var (
+		post        models.Post
+		updatedPost models.Post
+	)
+
+	if err := c.BodyParser(&updatedPost); err != nil {
+		return c.Status(400).JSON(err.Error())
+	}
+
+	database.Database.Find(&post, "id = ?", id)
+
+	post.Content = updatedPost.Content
+
+	if len(updatedPost.Tags) != 0 {
+		post.Tags = updatedPost.Tags
+	}
+
+	database.Database.Save(&post)
+
+	ResponsePost := actions.CreateResponsePost(post)
+
+	return c.Status(200).JSON(ResponsePost)
+}
