@@ -9,7 +9,7 @@ import (
 )
 
 type ResponsePost struct {
-	Id            uint           `json:"id"`
+	ID            uint           `json:"id"`
 	Content       string         `json:"content"`
 	CategoryRefer uint           `json:"category_id"`
 	Tags          pq.StringArray `json:"tags"`
@@ -17,7 +17,7 @@ type ResponsePost struct {
 }
 
 type FindResponsePost struct {
-	Id            uint            `json:"id"`
+	ID            uint            `json:"id"`
 	Content       string          `json:"content"`
 	CategoryRefer uint            `json:"category_id"`
 	Category      models.Category `json:"category"`
@@ -26,12 +26,12 @@ type FindResponsePost struct {
 }
 
 func CreateResponsePost(post models.Post) ResponsePost {
-	return ResponsePost{Id: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, CreatedAt: post.CreatedAt, Tags: post.Tags}
+	return ResponsePost{ID: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, CreatedAt: post.CreatedAt, Tags: post.Tags}
 }
 
 func CreateFindResponsePost(post models.Post, category models.Category) FindResponsePost {
 	return FindResponsePost{
-		Id: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, Category: category, CreatedAt: post.CreatedAt, Tags: post.Tags,
+		ID: uint(post.Id), Content: post.Content, CategoryRefer: post.CategoryRefer, Category: category, CreatedAt: post.CreatedAt, Tags: post.Tags,
 	}
 }
 

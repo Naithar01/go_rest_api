@@ -51,11 +51,11 @@ category_query := new(Person)
 # How to Add ( Array ) Column
 
 ```
-	Tags          pq.StringArray `json:"tags" gorm:"type:text"`
+	Tags:      pq.StringArray `json:"tags" gorm:"type:text"`
 ```
 
 ## if Data Type is Integer
 
 ```
-	Tags          pq.Int64Array `json:"tags" gorm:"type:integer"`
+	Tags:      pq.Int64Array `json:"tags" gorm:"type:integer"`
 ```

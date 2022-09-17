@@ -21,7 +21,7 @@ func AddPost(id uint, post *models.Post) error {
 
 	post.Category = category
 
-	if category.Id == 0 {
+	if category.ID == 0 {
 		return errors.New("order does not exist")
 	}
 

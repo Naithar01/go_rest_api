@@ -18,7 +18,7 @@ func FindAllCategory(c *fiber.Ctx) error {
 	posts := []models.Post{}
 
 	for _, category := range categorys {
-		actions.CreateFindPostByCategoryIdResponse(&posts, category.Id)
+		actions.CreateFindPostByCategoryIdResponse(&posts, category.ID)
 
 		responseCategory := actions.CreateResponseCategory(category, len(posts))
 		responseCategorys = append(responseCategorys, responseCategory)
@@ -50,11 +50,13 @@ func FindCategoryById(c *fiber.Ctx) error {
 
 	database.Database.Find(&category, "id = ?", id)
 
-	if category.Id == 0 {
+	if category.ID == 0 {
 		return c.Status(401).SendString("Validate Category id")
 	}
 
-	return c.Status(200).JSON(category)
+	findResponseCategory := actions.CreateFindResponseCategory(category)
+
+	return c.Status(200).JSON(findResponseCategory)
 }
 
 func DeleteCategory(c *fiber.Ctx) error {
