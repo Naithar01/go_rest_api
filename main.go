@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 
 	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/router"
@@ -14,6 +15,8 @@ func main() {
 	database.ConnectDB()
 
 	app := fiber.New()
+
+	app.Use(cors.New())
 
 	// Category
 	app.Get("/api/category", router.FindAllCategory)
