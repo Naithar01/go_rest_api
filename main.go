@@ -26,7 +26,6 @@ func main() {
 
 	// Post
 	app.Get("/api/post", router.FindAllPost)
-	app.Get("/api/post/ids", router.FindAllPostOnlyId)
 	app.Post("/api/post", router.CreatePost)
 	app.Get("/api/post/:id", router.FindPostById)
 	app.Delete("/api/post/:id", router.DeletePost)

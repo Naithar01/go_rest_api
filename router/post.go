@@ -62,20 +62,6 @@ func FindAllPost(c *fiber.Ctx) error {
 	return c.Status(200).JSON(responsePosts)
 }
 
-func FindAllPostOnlyId(c *fiber.Ctx) error {
-	posts := []models.Post{}
-
-	database.Database.Find(&posts)
-
-	post_ids := []int{}
-
-	for _, post := range posts {
-		post_ids = append(post_ids, int(post.ID))
-	}
-
-	return c.Status(200).JSON(post_ids)
-}
-
 func CreatePost(c *fiber.Ctx) error {
 	var post models.Post
 
