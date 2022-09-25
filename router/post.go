@@ -2,7 +2,6 @@ package router
 
 import (
 	"errors"
-	"fmt"
 	"github/com/Naithar01/go_rest_api/actions"
 	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/models"
@@ -38,9 +37,7 @@ func FindAllPost(c *fiber.Ctx) error {
 	posts := []models.Post{}
 
 	if category_query.Category_id != 0 {
-		actions.CreateFindPostByCategoryIdResponse(&posts, category_query.Category_id)
-
-		fmt.Println(category_query)
+		actions.CreateFindPostByCategoryId(&posts, category_query.Category_id)
 
 		responsePosts := []actions.ResponsePost{}
 
@@ -63,6 +60,20 @@ func FindAllPost(c *fiber.Ctx) error {
 	}
 
 	return c.Status(200).JSON(responsePosts)
+}
+
+func FindAllPostOnlyId(c *fiber.Ctx) error {
+	posts := []models.Post{}
+
+	database.Database.Find(&posts)
+
+	post_ids := []int{}
+
+	for _, post := range posts {
+		post_ids = append(post_ids, int(post.ID))
+	}
+
+	return c.Status(200).JSON(post_ids)
 }
 
 func CreatePost(c *fiber.Ctx) error {

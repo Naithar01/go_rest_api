@@ -35,6 +35,6 @@ func CreateFindResponsePost(post models.Post, category models.Category) FindResp
 	}
 }
 
-func CreateFindPostByCategoryIdResponse(posts *[]models.Post, category_id uint) {
+func CreateFindPostByCategoryId(posts *[]models.Post, category_id uint) {
 	database.Database.Find(&posts, "category_refer = ?", category_id)
 }

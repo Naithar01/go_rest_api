@@ -18,7 +18,7 @@ func FindAllCategory(c *fiber.Ctx) error {
 	posts := []models.Post{}
 
 	for _, category := range categorys {
-		actions.CreateFindPostByCategoryIdResponse(&posts, category.ID)
+		actions.CreateFindPostByCategoryId(&posts, category.ID)
 
 		responseCategory := actions.CreateResponseCategory(category, len(posts))
 		responseCategorys = append(responseCategorys, responseCategory)
