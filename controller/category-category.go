@@ -1,4 +1,4 @@
-package router
+package controller
 
 import (
 	"github/com/Naithar01/go_rest_api/actions"
