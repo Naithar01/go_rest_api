@@ -5,12 +5,17 @@ import (
 	"github/com/Naithar01/go_rest_api/actions"
 	"github/com/Naithar01/go_rest_api/database"
 	"github/com/Naithar01/go_rest_api/models"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type FindAllPostQuery struct {
 	Category_id uint `query:"category_id"`
+}
+
+type SearchPost struct {
+	Content string `json:"content"`
 }
 
 func AddPost(id uint, post *models.Post) error {
@@ -146,4 +151,33 @@ func UpdatePost(c *fiber.Ctx) error {
 	ResponsePost := actions.CreateResponsePost(post)
 
 	return c.Status(200).JSON(ResponsePost)
+}
+
+func SearchPostByContent(c *fiber.Ctx) error {
+	// 0. set variable
+	var searchBody SearchPost
+
+	// 1. put in variable by content And handling errors
+	if err := c.BodyParser(&searchBody); err != nil {
+		return c.Status(400).JSON(err.Error())
+	}
+
+	// 2. set posts variable And Find posts
+	posts := []models.Post{}
+	database.Database.Find(&posts)
+
+	// 3. set responsePosts variable
+	responsePosts := []actions.ResponsePost{}
+
+	// 4. if post.Content is include searchBody.Content is true
+	// 5. push the post by responsePosts
+	for _, post := range posts {
+		if strings.Contains(post.Content, searchBody.Content) {
+			responsePost := actions.CreateResponsePost(post)
+			responsePosts = append(responsePosts, responsePost)
+		}
+	}
+
+	return c.Status(200).JSON(responsePosts)
+
 }

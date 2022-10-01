@@ -17,6 +17,8 @@ func InitApp() *fiber.App {
 
 	// Post
 	app.Get("/api/post", controller.FindAllPost)
+	// // Search Post By Content
+	app.Get("/api/post/search/content", controller.SearchPostByContent)
 	app.Post("/api/post", controller.CreatePost)
 	app.Get("/api/post/:id", controller.FindPostById)
 	app.Delete("/api/post/:id", controller.DeletePost)
